@@ -1,16 +1,14 @@
 package auction.catalog;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-//@XmlRootElement
 public class AuctionItem {
-  //  @XmlAttribute
-    private int nr;//questo è un xml attribute->guarda catalog.xml
 
-	//@XmlElement
-    private String description;//
-	//@XmlElement
-	private double minimumPrice;//questo è un xml element->guarda catalog.xml
+    private int nr;
+    private String description;
+    private double minimumPrice;
 
     public AuctionItem() {
     }
@@ -21,6 +19,7 @@ public class AuctionItem {
         this.minimumPrice = minimumPrice;
     }
 
+    @XmlAttribute//questo è un xml attribute->guarda catalog.xml
     public int getNr() {
         return nr;
     }
@@ -29,6 +28,7 @@ public class AuctionItem {
         this.nr = nr;
     }
 
+    @XmlElement//questo è un xml element->guarda catalog.xml
     public String getDescription() {
         return description;
     }
@@ -37,6 +37,7 @@ public class AuctionItem {
         this.description = description;
     }
 
+    @XmlElement
     public double getMinimumPrice() {
         return minimumPrice;
     }
