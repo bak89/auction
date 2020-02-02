@@ -1,5 +1,6 @@
 package auction.gui;
 
+import auction.bidder.Bidder;
 import auction.catalog.Auction;
 import auction.catalog.AuctionCatalog;
 import auction.catalog.AuctionCatalogDAO;
@@ -58,13 +59,7 @@ public class AuctionController implements PropertyChangeListener {
 
     @FXML
     public void placeBid() {
-        //placeBid.setOnAction();
-    }
-
-    class HumanBidder {
-        public void auctionChanged() {
-        }
-
+    //    placeBidButton.setOnAction(actionEvent -> currentBid.setText(String.valueOf(auction.getCurrentBid())));
     }
 
     private void render() {
