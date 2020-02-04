@@ -3,6 +3,7 @@ package auction.catalog;
 import auction.bidder.Bidder;
 import auction.domain.AuctionStatus;
 import auction.domain.Bid;
+import javafx.application.Platform;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -17,7 +18,7 @@ public class Auction implements Runnable {
     private AuctionStatus status;
     private AuctionItem item;
     private Thread thread;
-    private PropertyChangeSupport changeSupport;
+    // private PropertyChangeSupport changeSupport;
     private List<Bidder> bidders = new ArrayList<Bidder>();
     private Bid currentBid = null;
 
@@ -25,7 +26,7 @@ public class Auction implements Runnable {
         this.endTime = endTime;
         this.status = AuctionStatus.CREATED;
         this.item = item;
-        this.changeSupport = new PropertyChangeSupport(this);
+        //this.changeSupport = new PropertyChangeSupport(this);
     }
 
     public LocalTime getEndTime() {
@@ -39,7 +40,8 @@ public class Auction implements Runnable {
     private void setStatus(AuctionStatus s) {
         AuctionStatus oldStatus = this.status;
         this.status = s;
-        this.changeSupport.firePropertyChange("status", oldStatus, this.status);
+        //   this.changeSupport.firePropertyChange("status", oldStatus, this.status);
+        notifyAuctionChanged();
     }
 
     public AuctionItem getItem() {
@@ -103,10 +105,16 @@ public class Auction implements Runnable {
         // devo salvare l'offerta che ho fatto
         Bid oldBid = this.currentBid;
         this.currentBid = new Bid(b, amount);
-        this.changeSupport.firePropertyChange("bid", oldBid, this.currentBid);
-        for (Bidder aBidder : this.bidders) {
-            aBidder.auctionChanged();
-        }
+        // this.changeSupport.firePropertyChange("bid", oldBid, this.currentBid);
+        notifyAuctionChanged();
+    }
+
+    private void notifyAuctionChanged() {
+        Platform.runLater(() -> {
+            for (Bidder aBidder : this.bidders) {
+                aBidder.auctionChanged();
+            }
+        });
     }
 
     @Override
@@ -120,7 +128,8 @@ public class Auction implements Runnable {
                 e.printStackTrace();
             }
             long remainingTime = this.getRemainingTime();
-            this.changeSupport.firePropertyChange("remainingTime", oldRemainingTime, remainingTime);
+            // this.changeSupport.firePropertyChange("remainingTime", oldRemainingTime, remainingTime);
+            notifyAuctionChanged();
             oldRemainingTime = remainingTime;
         }
         assert oldRemainingTime == 0;
@@ -128,7 +137,7 @@ public class Auction implements Runnable {
     }
 
     //il controller dice ti sto ascoltando
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
+    /*public void addPropertyChangeListener(PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
-    }
+    }*/
 }
